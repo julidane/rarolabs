@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const model = require('../Models');
 const BAD_REQUEST = 400;
+const formatData = require('../Utils/formatData');
 
 const schema = Joi.object({
   currentPage: Joi.number().required(),
@@ -15,7 +16,7 @@ const validateError = (status, message) => ({
 const createPagination = async(currentPage, quantity) => {
   const { error } = schema.validate({ currentPage, quantity });
   if (error) throw validateError(BAD_REQUEST, error.message);
-  const data = [currentPage, quantity];
+  const data = formatData(currentPage, quantity);
   const result = await model.createPagination(data)
   return result;
 };
